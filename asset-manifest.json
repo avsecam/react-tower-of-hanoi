@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-tower-of-hanoi/static/css/main.b02918ea.css",
+    "main.js": "/react-tower-of-hanoi/static/js/main.efe68916.js",
+    "index.html": "/react-tower-of-hanoi/index.html",
+    "main.b02918ea.css.map": "/react-tower-of-hanoi/static/css/main.b02918ea.css.map",
+    "main.efe68916.js.map": "/react-tower-of-hanoi/static/js/main.efe68916.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b02918ea.css",
+    "static/js/main.efe68916.js"
+  ]
+}
