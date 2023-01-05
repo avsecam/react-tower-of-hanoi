@@ -3,14 +3,17 @@ import "./styles.css"
 
 const amountOfRods: number = 3
 const discHeight: number = 30
+const initialDiscs: DiscProps[] = [
+	{ id: 0, color: "red", position: 0 },
+	{ id: 1, color: "blue", position: 1 },
+	{ id: 2, color: "green", position: 2 },
+	{ id: 3, color: "orange", position: 3 },
+	{ id: 4, color: "purple", position: 4 },
+]
 const initialState: GameState = {
 	activeDisc: undefined,
 	rods: [
-		[
-			{ id: 0, color: "red", position: 0 },
-			{ id: 1, color: "blue", position: 1 },
-			{ id: 2, color: "green", position: 2 },
-		],
+		[...initialDiscs],
 		[],
 		[],
 	]
@@ -32,14 +35,12 @@ export function GameContainer(): JSX.Element {
 
 	function drawGame(): JSX.Element {
 		let rods: JSX.Element[] = Array<JSX.Element>(amountOfRods).fill(<></>).map((val, idx) =>
-			<Rod key={idx} onClick={() => handleRodClick(idx)}>
-				{state.rods[idx].map(val => (
-					<Disc id={val.id} color={val.color} position={val.position} active={val.active} key={val.id} />
+			<Rod key={idx} onHover={} onClick={() => handleRodClick(idx)}>
+				{state.rods[idx].map((disc, discIdx) => (
+					<Disc id={disc.id} color={disc.color} position={discIdx} active={disc.active} key={disc.id} />
 				))}
 			</Rod>
 		)
-
-		console.log(rods)
 
 		return (
 			<>
@@ -49,18 +50,33 @@ export function GameContainer(): JSX.Element {
 	}
 
 	function handleRodClick(key: number): void {
-		const topDisc: DiscProps | undefined = state.rods[key].pop()
-
 		// Make a disc active by lifting it up
 		if (state.activeDisc === undefined) {
-			setState(() => {
-				return { ...state, activeDisc: topDisc }
-			})
+			const activeDisc: DiscProps | undefined = state.rods[key].pop()
+			setState({ ...state, activeDisc })
 		}
 
 		// Place an active disc onto a rod
 		else {
-			
+			let legalMove: boolean = true
+			const newRods: DiscProps[][] = state.rods.map((val, idx) => {
+				if (idx !== key) return val // Return same rod
+
+				if (state.activeDisc) { // Push the activeDisc if legal and return rod
+					if (val.length > 0 && val[val.length - 1].id > (state.activeDisc?.id ?? -1)) { // Check if the disc can be put on top
+						legalMove = false
+					} else {
+						val.push({ ...state.activeDisc, position: val.length })
+					}
+				}
+
+				return val
+			})
+
+			setState(() => ({
+				activeDisc: (legalMove) ? undefined : state.activeDisc,
+				rods: newRods
+			}))
 		}
 	}
 
@@ -75,20 +91,25 @@ export function GameContainer(): JSX.Element {
 				<div className="platform">
 					{drawGame()}
 				</div>
+				<div className="actions">
+					<button onClick={() => setState(initialState)}>Reset</button>
+				</div>
 			</div>
 		</>
 	)
 }
 
 function Rod({
+	onHover,
 	onClick,
 	children
 }: {
+	onHover?: () => void,
 	onClick?: () => void,
 	children?: JSX.Element[] | JSX.Element,
 }) {
 	return (
-		<button className="rodContainer" onClick={onClick}>
+		<button className="rodContainer" onMouseOver={onHover} onClick={onClick} style={{ height: `${(initialDiscs.length + 1) * discHeight}px` }}>
 			<>
 				<div className="rod"></div>
 				{children}
@@ -98,7 +119,8 @@ function Rod({
 }
 
 function Disc({ id, color, position, active }: DiscProps) {
+	const maxDiscs: number = initialDiscs.length
 	return (
-		<div className="disc" style={{ backgroundColor: color, width: `${(amountOfRods - id) * (200 / amountOfRods)}px`, bottom: `${discHeight * position}px` }}></div>
+		<div className="disc" style={{ backgroundColor: color, width: `${(maxDiscs - id) * (200 / maxDiscs)}px`, bottom: `${discHeight * position}px` }}></div>
 	)
 }

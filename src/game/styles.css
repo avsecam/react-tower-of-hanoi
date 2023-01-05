@@ -3,22 +3,31 @@
 	height: 100vh;
 	background-color: antiquewhite;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
 
+.activeDiscContainer {
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
 .platform {
-	width: 50%;
+	width: 40rem;
+	margin-block: 3rem;
 	height: min-content;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	border-bottom: 10px solid darkgreen;
+	border-bottom: 10px solid saddlebrown;
 }
 
-.rod {
-	width: 20%;
-	height: 20rem;
+.rodContainer {
+	position: relative;
+	width: 30%;
 	background-color: inherit;
 	border: none;
 	display: flex;
@@ -26,9 +35,39 @@
 	cursor: pointer;
 }
 
-.rod>*{
+.rodContainer>.rod {
 	width: 5px;
 	height: 100%;
-	border-bottom: 10px solid darkgreen;
-	background-color: darkgreen;
+	border-bottom: 10px solid saddlebrown;
+	background-color: saddlebrown;
+}
+
+.rodContainer:hover>.disc:last-child {
+	box-shadow: 0 0 1rem gold;
+}
+
+.disc {
+	position: absolute;
+	bottom: 0;
+	height: 30px;
+	transition: all 0.2s;
+}
+
+.actions>button {
+	position: relative;
+	border: none;
+	top: 0;
+	color: saddlebrown;
+	border-radius: 0.5rem;
+	background-color: inherit;
+	padding: 1rem 2rem;
+	font-size: large;
+	cursor: pointer;
+	transition: all 0.25s;
+}
+
+.actions>button:hover {
+	top: 3px;
+	box-shadow: inset 0 0.5rem 0.5rem -0.3rem hsla(0 0% 0% / 0.1),
+	inset 0 -0.5rem 0.5rem -0.1rem hsla(0 0% 100% / 0.2);
 }
