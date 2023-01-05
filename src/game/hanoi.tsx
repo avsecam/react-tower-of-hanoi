@@ -18,7 +18,6 @@ const initialState: GameState = {
 		[],
 	]
 }
-
 type DiscProps = {
 	id: number,
 	color: string,
@@ -53,7 +52,6 @@ export function GameContainer(): JSX.Element {
 		// If no active disc, highlight the topmost disc in rod
 		if (state.activeDisc === undefined) {
 			const topDisc: HTMLElement | null = document.querySelector(`.rodContainer:nth-child(${key + 1})>.disc:last-child`)
-			console.log(topDisc)
 			if (topDisc) topDisc.style.boxShadow = "0 0 1rem gold"
 		}
 		// Else, highlight the rod
@@ -104,16 +102,24 @@ export function GameContainer(): JSX.Element {
 	return (
 		<>
 			<div className="container">
+				<div style={{height: "1rem"}}>
+					{(state.rods[amountOfRods - 1].length === initialDiscs.length) ? <div>Game Over!</div> : null}
+				</div>
 				<div className="activeDiscContainer" style={{ height: discHeight }}>
 					{(state.activeDisc)
 						? <Disc id={state.activeDisc?.id ?? 0} color={state.activeDisc?.color ?? "white"} position={0} />
 						: null}
 				</div>
-				<div className="platform">
-					{drawGame()}
+				<div className="platformContainer">
+					<div className="platform">
+						{drawGame()}
+					</div>
+					<div style={{ position: "relative", width: "100%", height: "10px", backgroundColor: "saddlebrown", zIndex: 100 }}></div>
 				</div>
 				<div className="actions">
-					<button onClick={() => setState(initialState)}>Reset</button>
+					<button onClick={() => setState({
+						rods: [[...initialDiscs], [], []]
+					})}>Reset</button>
 				</div>
 			</div>
 		</>

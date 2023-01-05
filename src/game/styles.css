@@ -15,14 +15,16 @@
 	justify-content: center;
 }
 
-.platform {
+.platformContainer {
 	width: 40rem;
 	margin-block: 3rem;
 	height: min-content;
+}
+
+.platform {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	border-bottom: 10px solid saddlebrown;
 }
 
 .rodContainer {
