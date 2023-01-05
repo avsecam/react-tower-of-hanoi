@@ -40,10 +40,7 @@
 	height: 100%;
 	border-bottom: 10px solid saddlebrown;
 	background-color: saddlebrown;
-}
-
-.rodContainer:hover>.disc:last-child {
-	box-shadow: 0 0 1rem gold;
+	transition: all 0.2s;
 }
 
 .disc {

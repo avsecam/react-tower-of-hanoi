@@ -35,7 +35,7 @@ export function GameContainer(): JSX.Element {
 
 	function drawGame(): JSX.Element {
 		let rods: JSX.Element[] = Array<JSX.Element>(amountOfRods).fill(<></>).map((val, idx) =>
-			<Rod key={idx} onHover={} onClick={() => handleRodClick(idx)}>
+			<Rod key={idx} onHover={() => handleRodHover(idx)} onLeave={() => handleRodLeave(idx)} onClick={() => handleRodClick(idx)}>
 				{state.rods[idx].map((disc, discIdx) => (
 					<Disc id={disc.id} color={disc.color} position={discIdx} active={disc.active} key={disc.id} />
 				))}
@@ -47,6 +47,27 @@ export function GameContainer(): JSX.Element {
 				{rods}
 			</>
 		)
+	}
+
+	function handleRodHover(key: number): void {
+		// If no active disc, highlight the topmost disc in rod
+		if (state.activeDisc === undefined) {
+			const topDisc: HTMLElement | null = document.querySelector(`.rodContainer:nth-child(${key + 1})>.disc:last-child`)
+			console.log(topDisc)
+			if (topDisc) topDisc.style.boxShadow = "0 0 1rem gold"
+		}
+		// Else, highlight the rod
+		else {
+			const rod: HTMLElement | null = document.querySelector(`.rodContainer:nth-child(${key + 1})>.rod`)
+			if (rod) rod.style.boxShadow = "0 0 1rem gold"
+		}
+	}
+
+	function handleRodLeave(key: number): void {
+		const rod: HTMLElement | null = document.querySelector(`.rodContainer:nth-child(${key + 1})>.rod`)
+		if (rod) rod.style.boxShadow = ""
+		const topDisc: HTMLElement | null = document.querySelector(`.rodContainer:nth-child(${key + 1})>.disc:last-child`)
+		if (topDisc) topDisc.style.boxShadow = ""
 	}
 
 	function handleRodClick(key: number): void {
@@ -101,15 +122,17 @@ export function GameContainer(): JSX.Element {
 
 function Rod({
 	onHover,
+	onLeave,
 	onClick,
 	children
 }: {
 	onHover?: () => void,
+	onLeave?: () => void,
 	onClick?: () => void,
 	children?: JSX.Element[] | JSX.Element,
 }) {
 	return (
-		<button className="rodContainer" onMouseOver={onHover} onClick={onClick} style={{ height: `${(initialDiscs.length + 1) * discHeight}px` }}>
+		<button className="rodContainer" onMouseEnter={onHover} onMouseLeave={onLeave} onClick={onClick} style={{ height: `${(initialDiscs.length + 1) * discHeight}px` }}>
 			<>
 				<div className="rod"></div>
 				{children}
